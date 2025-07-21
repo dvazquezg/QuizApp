@@ -10,18 +10,27 @@ import java.util.List;
 @Service
 public class TestTableService {
 
-    @Autowired
-    private TestTableDAO repository;
+	@Autowired
+	TestTableDAO testTableDAO;
 
-    public List<TestTable> getAllEntries() {
-        System.out.println(repository.count());
-        List<TestTable> list = repository.findAll();
-        System.out.println(">>>> list size: " + list.size());
-//        for (TestTable t : list) {
-//            System.out.println(t.getName());
-//        }
-        return repository.findAll();
-    }
+	public List<TestTable> getAllEntries() {
+		return testTableDAO.findAll();
+	}
+
+	public TestTable getEntriesByName(String name) {
+		return testTableDAO.findById(name).orElse(null);
+	}
+
+	public List<TestTable> findByNameContainingIgnoreCase(String keyword) {
+		return testTableDAO.findByNameContainingIgnoreCase(keyword);
+	}
+
+	public TestTable createEntry(TestTable entry) {
+		return testTableDAO.save(entry);
+	}
+
+	public void deleteEntry(String name) {
+		testTableDAO.deleteById(name);
+	}
 
 }
-

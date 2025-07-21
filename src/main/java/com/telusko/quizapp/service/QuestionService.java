@@ -10,14 +10,11 @@ import java.util.List;
 @Service
 public class QuestionService {
 
-    @Autowired
-    QuestionDAO questionDAO;
+	@Autowired
+	QuestionDAO questionDAO;
 
-    public List<Question> getAllQuestions() {
-        List<Question> mylist = questionDAO.findAll();
-        for (Question q : mylist) {
-            System.out.println(q.getId());
-        }
-        return mylist;
-    }
+	public List<Question> getAllQuestions() {
+		return questionDAO.findAll();
+	}
+
 }

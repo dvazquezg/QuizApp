@@ -13,11 +13,12 @@ import java.util.List;
 @RequestMapping("question")
 public class QuestionController {
 
-    @Autowired
-    QuestionService questionService;
+	@Autowired
+	QuestionService questionService;
 
-    @GetMapping("allQuestions")
-    public List<Question> getAllQuestions() {
-        return questionService.getAllQuestions();
-    }
+	@GetMapping("allQuestions")
+	public List<Question> getAllQuestions() {
+		return questionService.getAllQuestions();
+	}
+
 }

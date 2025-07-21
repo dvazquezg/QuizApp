@@ -1,7 +1,7 @@
 package com.telusko.quizapp.controller;
 
-import com.telusko.quizapp.dao.TestTableDAO;
 import com.telusko.quizapp.model.TestTable;
+import com.telusko.quizapp.service.TestTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,36 +11,36 @@ import java.util.List;
 @RequestMapping("/api/test")
 public class TestTableController {
 
-    @Autowired
-    private TestTableDAO testTableRepository;
+	@Autowired
+	TestTableService testTableService;
 
-    // Get all entries
-    @GetMapping
-    public List<TestTable> getAllEntries() {
-        System.out.println(testTableRepository.count());
-        List<TestTable> list = testTableRepository.findAll();
-        System.out.println(">>>> list size: " + list.size());
-        for (TestTable t : list) {
-            System.out.println(t.getName());
-        }
-        return testTableRepository.findAll();
-    }
+	// Get all entries
+	@GetMapping("allNames")
+	public List<TestTable> getAllEntries() {
+		return testTableService.getAllEntries();
+	}
 
-    // Get entry by name (primary key)
-    @GetMapping("/{name}")
-    public TestTable getEntryByName(@PathVariable String name) {
-        return testTableRepository.findById(name).orElse(null);
-    }
+	// Get entry by name (primary key)
+	@GetMapping("/{name}")
+	public TestTable getEntryByName(@PathVariable String name) {
+		return testTableService.getEntriesByName(name);
+	}
 
-    // Create a new entry
-    @PostMapping
-    public TestTable createEntry(@RequestBody TestTable entry) {
-        return testTableRepository.save(entry);
-    }
+	@GetMapping("/search")
+	public List<TestTable> findByNameContainingIgnoreCase(@RequestParam String keyword) {
+		return testTableService.findByNameContainingIgnoreCase(keyword);
+	}
 
-    // Delete entry by name
-    @DeleteMapping("/{name}")
-    public void deleteEntry(@PathVariable String name) {
-        testTableRepository.deleteById(name);
-    }
+	// Create a new entry
+	@PostMapping("addName")
+	public TestTable createEntry(@RequestBody TestTable entry) {
+		return testTableService.createEntry(entry);
+	}
+
+	// Delete entry by name
+	@DeleteMapping("/{name}")
+	public void deleteEntry(@PathVariable String name) {
+		testTableService.deleteEntry(name);
+	}
+
 }

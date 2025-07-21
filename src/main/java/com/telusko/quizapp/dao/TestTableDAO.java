@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface TestTableDAO extends JpaRepository<TestTable, String> {
 
-    // Optional: You can define custom queries here if needed
-    List<TestTable> findByNameContainingIgnoreCase(String keyword);
+	// Optional: You can define custom queries here if needed
+	List<TestTable> findByNameContainingIgnoreCase(String keyword);
+
 }
