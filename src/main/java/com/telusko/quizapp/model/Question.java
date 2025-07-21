@@ -11,7 +11,7 @@ import lombok.Data;
 public class Question {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // works with SERIAL in Postgres
 	private Integer id;
 
 	private String questionTitle;
