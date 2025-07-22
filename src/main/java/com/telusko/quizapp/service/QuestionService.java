@@ -14,16 +14,19 @@ public class QuestionService {
 	@Autowired
 	QuestionDAO questionDAO;
 
+	@Autowired
+	private QuestionMapper questionMapper;
+
 	public List<QuestionDTO> getAllQuestions() {
-		return questionDAO.findAll().stream().map(QuestionMapper::toDTO).collect(Collectors.toList());
+		return questionDAO.findAll().stream().map(questionMapper::toDTO).collect(Collectors.toList());
 	}
 
 	public List<QuestionDTO> getQuestionsByCategory(String category) {
-		return questionDAO.findByCategory(category).stream().map(QuestionMapper::toDTO).collect(Collectors.toList());
+		return questionDAO.findByCategory(category).stream().map(questionMapper::toDTO).collect(Collectors.toList());
 	}
 
 	public String addQuestion(QuestionDTO question) {
-		questionDAO.save(QuestionMapper.toEntity(question));
+		questionDAO.save(questionMapper.toEntity(question));
 		return "success";
 	}
 
