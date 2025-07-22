@@ -11,11 +11,15 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionService {
 
-	@Autowired
-	QuestionDAO questionDAO;
+	private final QuestionDAO questionDAO;
+
+	private final QuestionMapper questionMapper;
 
 	@Autowired
-	private QuestionMapper questionMapper;
+	public QuestionService(QuestionDAO questionDAO, QuestionMapper questionMapper) {
+		this.questionDAO = questionDAO;
+		this.questionMapper = questionMapper;
+	}
 
 	public List<QuestionDTO> getAllQuestions() {
 		return questionDAO.findAll().stream().map(questionMapper::toDTO).collect(Collectors.toList());
