@@ -6,6 +6,9 @@ import com.telusko.quizapp.model.Question;
 public class QuestionAssemblerDisassembler {
 
 	public static QuestionDTO toDTO(Question question) {
+		if (question == null) {
+			return null;
+		}
 		return QuestionDTO.builder()
 			.id(question.getId())
 			.questionTitle(question.getQuestionTitle())
@@ -17,24 +20,23 @@ public class QuestionAssemblerDisassembler {
 			.difficultyLevel(question.getDifficultyLevel())
 			.category(question.getCategory())
 			.build();
-		// return null;
 	}
 
 	public static Question toEntity(QuestionDTO dto) {
-		if (dto == null)
+		if (dto == null) {
 			return null;
-		Question question = new Question();
-		// question.setId(dto.getId()); // usually id is null for new records
-		question.setQuestionTitle(dto.getQuestionTitle());
-		question.setOption1(dto.getOption1());
-		question.setOption2(dto.getOption2());
-		question.setOption3(dto.getOption3());
-		question.setOption4(dto.getOption4());
-		question.setRightAnswer(dto.getRightAnswer());
-		question.setDifficultyLevel(dto.getDifficultyLevel());
-		question.setCategory(dto.getCategory());
-		return question;
-		// return null;
+		}
+		return Question.builder()
+			// Skip id for inserting a new record (JPA will auto-generate it)
+			.questionTitle(dto.getQuestionTitle())
+			.option1(dto.getOption1())
+			.option2(dto.getOption2())
+			.option3(dto.getOption3())
+			.option4(dto.getOption4())
+			.rightAnswer(dto.getRightAnswer())
+			.difficultyLevel(dto.getDifficultyLevel())
+			.category(dto.getCategory())
+			.build();
 	}
 
 }

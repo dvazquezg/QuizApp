@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,47 +20,28 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class QuestionServiceTest {
 
-    @Mock
-    private QuestionDAO questionDAO;
+	@Mock
+	private QuestionDAO questionDAO;
 
-    @Mock
-    private QuestionMapper questionMapper;
+	@Mock
+	private QuestionMapper questionMapper;
 
-    @InjectMocks
-    private QuestionService questionService;
+	@InjectMocks
+	private QuestionService questionService;
 
-    private Question question;
-    private QuestionDTO questionDTO;
+	private Question question;
 
-    @BeforeEach
-    void setup() {
-        question = new Question();
-        question.setId(1);
-        question.setQuestionTitle("What is Java?");
-        question.setOption1("Programming Language");
-        question.setOption2("Coffee");
-        question.setOption3("Island");
-        question.setOption4("Car");
-        question.setRightAnswer("Programming Language");
-        question.setDifficultyLevel("Easy");
-        question.setCategory("Java");
+	private QuestionDTO questionDTO;
 
-        questionDTO = QuestionDTO.builder()
-                .id(1)
-                .questionTitle("What is Java?")
-                .option1("Programming Language")
-                .option2("Coffee")
-                .option3("Island")
-                .option4("Car")
-                .rightAnswer("Programming Language")
-                .difficultyLevel("Easy")
-                .category("Java")
-                .build();
-    }
+	@BeforeEach
+	void setup() {
+		question = QuestionTestFactory.createSampleQuestion();
+		questionDTO = QuestionTestFactory.createSampleQuestionDTO();
+	}
 
-    @Test
+	@Test
     void testGetAllQuestions() {
-        when(questionDAO.findAll()).thenReturn(Arrays.asList(question));
+        when(questionDAO.findAll()).thenReturn(Collections.singletonList(question));
         when(questionMapper.toDTO(question)).thenReturn(questionDTO);
 
         List<QuestionDTO> result = questionService.getAllQuestions();
@@ -73,7 +54,7 @@ public class QuestionServiceTest {
         verify(questionMapper, times(1)).toDTO(question);
     }
 
-    @Test
+	@Test
     void testGetQuestionsByCategory() {
         when(questionDAO.findByCategory("Java")).thenReturn(List.of(question));
         when(questionMapper.toDTO(question)).thenReturn(questionDTO);
@@ -87,7 +68,7 @@ public class QuestionServiceTest {
         verify(questionMapper).toDTO(question);
     }
 
-    @Test
+	@Test
     void testAddQuestion() {
         when(questionMapper.toEntity(questionDTO)).thenReturn(question);
 
@@ -97,19 +78,19 @@ public class QuestionServiceTest {
         verify(questionDAO).save(question);
     }
 
-    @Test
-    void testAddQuestionTwo() {
-        // creating a mock manually
-        QuestionMapper questionMapper2 = Mockito.mock(QuestionMapper.class);
-        QuestionDAO questionDAO2 = Mockito.mock(QuestionDAO.class);
-        QuestionService questionService2 = new QuestionService(questionDAO2, questionMapper2);
+	@Test
+	void testAddQuestionTwo() {
+		// creating a mock manually
+		QuestionMapper questionMapper2 = Mockito.mock(QuestionMapper.class);
+		QuestionDAO questionDAO2 = Mockito.mock(QuestionDAO.class);
+		QuestionService questionService2 = new QuestionService(questionDAO2, questionMapper2);
 
-        when(questionMapper2.toEntity(questionDTO)).thenReturn(question);
+		when(questionMapper2.toEntity(questionDTO)).thenReturn(question);
 
-        String result = questionService2.addQuestion(questionDTO);
+		String result = questionService2.addQuestion(questionDTO);
 
-        assertEquals("success", result);
-        verify(questionDAO2).save(question);
-    }
+		assertEquals("success", result);
+		verify(questionDAO2).save(question);
+	}
+
 }
-
