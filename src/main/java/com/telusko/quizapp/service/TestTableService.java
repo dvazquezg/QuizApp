@@ -1,6 +1,6 @@
 package com.telusko.quizapp.service;
 
-import com.telusko.quizapp.dao.TestTableDAO;
+import com.telusko.quizapp.repository.TestTableDAO;
 import com.telusko.quizapp.model.TestTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

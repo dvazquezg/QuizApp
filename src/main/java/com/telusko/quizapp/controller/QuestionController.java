@@ -1,5 +1,6 @@
 package com.telusko.quizapp.controller;
 
+import com.telusko.quizapp.dto.QuestionDTO;
 import com.telusko.quizapp.model.Question;
 import com.telusko.quizapp.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,17 @@ public class QuestionController {
 	QuestionService questionService;
 
 	@GetMapping("allQuestions")
-	public List<Question> getAllQuestions() {
+	public List<QuestionDTO> getAllQuestions() {
 		return questionService.getAllQuestions();
 	}
 
 	@GetMapping("category/{category}")
-	public List<Question> getQuestionsByCategory(@PathVariable String category) {
+	public List<QuestionDTO> getQuestionsByCategory(@PathVariable String category) {
 		return questionService.getQuestionsByCategory(category);
 	}
 
 	@PostMapping("add")
-	public String addQuestion(@RequestBody Question question) {
+	public String addQuestion(@RequestBody QuestionDTO question) {
 		return questionService.addQuestion(question);
 	}
 

@@ -1,4 +1,4 @@
-package com.telusko.quizapp.dao;
+package com.telusko.quizapp.repository;
 
 import com.telusko.quizapp.model.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
