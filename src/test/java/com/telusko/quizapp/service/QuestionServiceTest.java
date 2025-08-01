@@ -44,8 +44,9 @@ public class QuestionServiceTest {
         when(questionDAO.findAll()).thenReturn(Collections.singletonList(question));
         when(questionMapper.toDTO(question)).thenReturn(questionDTO);
 
-        List<QuestionDTO> result = questionService.getAllQuestions();
+        List<QuestionDTO> result = questionService.getAllQuestions().getBody();
 
+        assert result != null;
         assertEquals(1, result.size());
         assertEquals("What is Java?", result.get(0).getQuestionTitle());
 
@@ -59,8 +60,9 @@ public class QuestionServiceTest {
         when(questionDAO.findByCategory("Java")).thenReturn(List.of(question));
         when(questionMapper.toDTO(question)).thenReturn(questionDTO);
 
-        List<QuestionDTO> result = questionService.getQuestionsByCategory("Java");
+        List<QuestionDTO> result = questionService.getQuestionsByCategory("Java").getBody();
 
+        assert result != null;
         assertEquals(1, result.size());
         assertEquals("Java", result.get(0).getCategory());
 
@@ -72,9 +74,9 @@ public class QuestionServiceTest {
     void testAddQuestion() {
         when(questionMapper.toEntity(questionDTO)).thenReturn(question);
 
-        String result = questionService.addQuestion(questionDTO);
+        String result = questionService.addQuestion(questionDTO).getBody();
 
-        assertEquals("success", result);
+        assertEquals("Success", result);
         verify(questionDAO).save(question);
     }
 
@@ -87,9 +89,9 @@ public class QuestionServiceTest {
 
 		when(questionMapper2.toEntity(questionDTO)).thenReturn(question);
 
-		String result = questionService2.addQuestion(questionDTO);
+		String result = questionService2.addQuestion(questionDTO).getBody();
 
-		assertEquals("success", result);
+		assertEquals("Success", result);
 		verify(questionDAO2).save(question);
 	}
 
