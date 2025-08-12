@@ -2,10 +2,12 @@ package com.telusko.quizapp.service;
 
 import com.telusko.quizapp.dto.QuestionDTO;
 import com.telusko.quizapp.model.Question;
+import org.springframework.stereotype.Component;
 
+@Component
 public class QuestionAssemblerDisassembler {
 
-	public static QuestionDTO toDTO(Question question) {
+	public QuestionDTO toDTO(Question question) {
 		if (question == null) {
 			return null;
 		}
@@ -22,7 +24,23 @@ public class QuestionAssemblerDisassembler {
 			.build();
 	}
 
-	public static Question toEntity(QuestionDTO dto) {
+	public QuestionDTO toDTONoAnswer(Question question) {
+		if (question == null) {
+			return null;
+		}
+		return QuestionDTO.builder()
+			.id(question.getId())
+			.questionTitle(question.getQuestionTitle())
+			.option1(question.getOption1())
+			.option2(question.getOption2())
+			.option3(question.getOption3())
+			.option4(question.getOption4())
+			.difficultyLevel(question.getDifficultyLevel())
+			.category(question.getCategory())
+			.build();
+	}
+
+	public Question toEntity(QuestionDTO dto) {
 		if (dto == null) {
 			return null;
 		}
