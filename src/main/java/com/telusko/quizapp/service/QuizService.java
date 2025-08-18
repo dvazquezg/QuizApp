@@ -1,7 +1,8 @@
 package com.telusko.quizapp.service;
 
-import com.telusko.quizapp.dto.QuestionWrapper;
+import com.telusko.quizapp.dto.QuestionWrapperDTO;
 import com.telusko.quizapp.dto.QuizDTO;
+import com.telusko.quizapp.dto.ResponseDTO;
 import com.telusko.quizapp.model.Question;
 import com.telusko.quizapp.model.Quiz;
 import com.telusko.quizapp.repository.QuestionDAO;
@@ -15,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -54,10 +57,10 @@ public class QuizService {
 		return new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST);
 	}
 
-	public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer id) {
+	public ResponseEntity<List<QuestionWrapperDTO>> getQuizQuestions(Integer id) {
 		try {
 			Optional<Quiz> quiz = quizDAO.findById(id);
-			List<QuestionWrapper> quizQuestions;
+			List<QuestionWrapperDTO> quizQuestions;
 
 			if (quiz.isPresent()) {
 				quizQuestions = quiz.get().getQuestions().stream().map(questionMapper::toAnswerWrapperDTO).toList();
@@ -73,6 +76,41 @@ public class QuizService {
 		}
 
 		return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+	}
+
+	public ResponseEntity<Integer> submitQuiz(Integer id, List<ResponseDTO> responses) {
+		try {
+			Integer score = 0;
+			Optional<Quiz> quiz = quizDAO.findById(id);
+			Map<Integer, String> answers;
+
+			if (quiz.isPresent()) {
+				answers = quiz.get()
+					.getQuestions()
+					.stream()
+					.collect(Collectors.toMap(Question::getId, Question::getRightAnswer));
+			}
+			else {
+				throw new IllegalArgumentException("Quiz id does not exist");
+			}
+
+			// grade quiz
+			for (ResponseDTO responseDTO : responses) {
+				Integer questionId = responseDTO.getId();
+				String response = responseDTO.getResponse();
+				String answer = answers.get(questionId);
+				if (response.equals(answer)) {
+					score++;
+				}
+			}
+
+			return new ResponseEntity<>(score, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			logger.error("An error occurred while trying to submit quiz responses", e);
+		}
+
+		return new ResponseEntity<>(0, HttpStatus.BAD_REQUEST);
 	}
 
 }
