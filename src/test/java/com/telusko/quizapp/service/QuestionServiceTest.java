@@ -40,45 +40,45 @@ public class QuestionServiceTest {
 	}
 
 	@Test
-    void testGetAllQuestions() {
-        when(questionDAO.findAll()).thenReturn(Collections.singletonList(question));
-        when(questionMapper.toDTO(question)).thenReturn(questionDTO);
+	void testGetAllQuestions() {
+		when(questionDAO.findAll()).thenReturn(Collections.singletonList(question));
+		when(questionMapper.toDTO(question)).thenReturn(questionDTO);
 
-        List<QuestionDTO> result = questionService.getAllQuestions().getBody();
+		List<QuestionDTO> result = questionService.getAllQuestions().getBody();
 
-        assert result != null;
-        assertEquals(1, result.size());
-        assertEquals("What is Java?", result.get(0).getQuestionTitle());
+		assert result != null;
+		assertEquals(1, result.size());
+		assertEquals("What is Java?", result.get(0).getQuestionTitle());
 
-        // ensures your code follows the correct interaction pattern
-        verify(questionDAO, times(1)).findAll();
-        verify(questionMapper, times(1)).toDTO(question);
-    }
-
-	@Test
-    void testGetQuestionsByCategory() {
-        when(questionDAO.findByCategory("Java")).thenReturn(List.of(question));
-        when(questionMapper.toDTO(question)).thenReturn(questionDTO);
-
-        List<QuestionDTO> result = questionService.getQuestionsByCategory("Java").getBody();
-
-        assert result != null;
-        assertEquals(1, result.size());
-        assertEquals("Java", result.get(0).getCategory());
-
-        verify(questionDAO).findByCategory("Java");
-        verify(questionMapper).toDTO(question);
-    }
+		// ensures your code follows the correct interaction pattern
+		verify(questionDAO, times(1)).findAll();
+		verify(questionMapper, times(1)).toDTO(question);
+	}
 
 	@Test
-    void testAddQuestion() {
-        when(questionMapper.toEntity(questionDTO)).thenReturn(question);
+	void testGetQuestionsByCategory() {
+		when(questionDAO.findByCategory("Java")).thenReturn(List.of(question));
+		when(questionMapper.toDTO(question)).thenReturn(questionDTO);
 
-        String result = questionService.addQuestion(questionDTO).getBody();
+		List<QuestionDTO> result = questionService.getQuestionsByCategory("Java").getBody();
 
-        assertEquals("Success", result);
-        verify(questionDAO).save(question);
-    }
+		assert result != null;
+		assertEquals(1, result.size());
+		assertEquals("Java", result.get(0).getCategory());
+
+		verify(questionDAO).findByCategory("Java");
+		verify(questionMapper).toDTO(question);
+	}
+
+	@Test
+	void testAddQuestion() {
+		when(questionMapper.toEntity(questionDTO)).thenReturn(question);
+
+		String result = questionService.addQuestion(questionDTO).getBody();
+
+		assertEquals("Success", result);
+		verify(questionDAO).save(question);
+	}
 
 	@Test
 	void testAddQuestionTwo() {

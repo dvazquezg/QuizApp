@@ -1,6 +1,6 @@
 package com.telusko.quizapp.service;
 
-import com.telusko.quizapp.dto.QuestionDTO;
+import com.telusko.quizapp.dto.QuestionWrapper;
 import com.telusko.quizapp.dto.QuizDTO;
 import com.telusko.quizapp.model.Question;
 import com.telusko.quizapp.model.Quiz;
@@ -54,13 +54,13 @@ public class QuizService {
 		return new ResponseEntity<>("Failure", HttpStatus.BAD_REQUEST);
 	}
 
-	public ResponseEntity<List<QuestionDTO>> getQuizQuestions(Integer id) {
+	public ResponseEntity<List<QuestionWrapper>> getQuizQuestions(Integer id) {
 		try {
 			Optional<Quiz> quiz = quizDAO.findById(id);
-			List<QuestionDTO> quizQuestions;
+			List<QuestionWrapper> quizQuestions;
 
 			if (quiz.isPresent()) {
-				quizQuestions = quiz.get().getQuestions().stream().map(questionMapper::toDTONoAnswer).toList();
+				quizQuestions = quiz.get().getQuestions().stream().map(questionMapper::toAnswerWrapperDTO).toList();
 			}
 			else {
 				throw new IllegalArgumentException("Quiz id does not exist");
